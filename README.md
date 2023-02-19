@@ -1,5 +1,9 @@
 # @semantic-release-extras/verified-git-commit
 
+[![Build Status]](https://github.com/semantic-release-extras/verified-git-commit/actions/workflows/release.yml)
+
+[build status]: https://github.com/semantic-release-extras/verified-git-commit/actions/workflows/release.yml/badge.svg?event=push
+
 This is a feature-limited alternative to the standard [@semantic-release/git] plugin.
 GitHub automatically signs commits from bots of the REST API, so this plugin lets you create gpg-signed [verified commits] without having to manage your own gpg keys.
 
