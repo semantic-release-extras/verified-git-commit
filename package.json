@@ -1,6 +1,6 @@
 {
   "name": "@semantic-release-extras/verified-git-commit",
-  "version": "0.0.0-semantic-release-managed",
+  "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
