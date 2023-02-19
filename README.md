@@ -16,6 +16,10 @@ Commits made by this plugin look [like this].
 
 ## Caveats
 
+### Only supports GitHub
+
+This plugin uses the GitHub API, so other git forges are not supported.
+
 ### Each commit can only update one file
 
 The [underlying API endpoint] can only update a single file at a time.
