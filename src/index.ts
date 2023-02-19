@@ -54,13 +54,18 @@ function unsafeParseRepositorySlug(repositoryUrl: string): RepositorySlug {
   return { owner: maybeRepositoryUrl[0], name: maybeRepositoryUrl[1] };
 }
 
-function unsafeParseAssets(pluginConfig: PluginSpec): string[] {
+// The type PluginSpec is misleading here, `semantic-release --dry-run`
+// indicates this value is an object.
+function unsafeParseAssets(pluginConfig: unknown): string[] {
   if (typeof pluginConfig === "string") {
     throw new Error(`Expected plugin config to specify 'assets'`);
   }
-  const config = pluginConfig[1];
-  if (typeof config !== "object") {
+  const config = pluginConfig;
+  if (typeof config !== "object" || config === null) {
     throw new Error("Expected plugin config to contain an object");
+  }
+  if (!("assets" in config)) {
+    throw new Error("Expected plugin config to contain an `assets` property");
   }
   const assets = config.assets;
   if (!Array.isArray(assets)) {
