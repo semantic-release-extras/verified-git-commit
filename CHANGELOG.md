@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/semantic-release-extras/verified-git-commit/compare/v1.0.1...v1.0.2) (2023-02-19)
+
+
+### Bug Fixes
+
+* template commit message properly ([2eeba1c](https://github.com/semantic-release-extras/verified-git-commit/commit/2eeba1c3c7babee8a17c9b39a07a8511f770d40f)), closes [#7](https://github.com/semantic-release-extras/verified-git-commit/issues/7)
+
 ## [1.0.1](https://github.com/semantic-release-extras/verified-git-commit/compare/v1.0.0...v1.0.1) (2023-02-19)
 
 
