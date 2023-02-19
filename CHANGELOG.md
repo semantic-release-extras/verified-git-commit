@@ -1,3 +1,10 @@
+## [1.0.6](https://github.com/semantic-release-extras/verified-git-commit/compare/v1.0.5...v1.0.6) (2023-02-19)
+
+
+### Bug Fixes
+
+* **deps:** use semver ranges ([8c291af](https://github.com/semantic-release-extras/verified-git-commit/commit/8c291af506543f61596d2e3a78b1b45f6107a76f)), closes [#9](https://github.com/semantic-release-extras/verified-git-commit/issues/9)
+
 ## [1.0.5](https://github.com/semantic-release-extras/verified-git-commit/compare/v1.0.4...v1.0.5) (2023-02-19)
 
 
