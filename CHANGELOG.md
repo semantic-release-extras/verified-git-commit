@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/semantic-release-extras/verified-git-commit/compare/v1.0.3...v1.0.4) (2023-02-19)
+
+
+### Bug Fixes
+
+* **docs:** add readme ([366316e](https://github.com/semantic-release-extras/verified-git-commit/commit/366316e227cc0229655042c9bfb799c2c3957d5b))
+
 ## [1.0.3](https://github.com/semantic-release-extras/verified-git-commit/compare/v1.0.2...v1.0.3) (2023-02-19)
 
 
