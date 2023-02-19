@@ -93,9 +93,14 @@ async function prepare(pluginConfig: PluginSpec, context: Context) {
   const assets = unsafeParseAssets(pluginConfig);
   const octokit = getOctokit(githubToken);
 
+  const nextRelease = context.nextRelease;
+  if (nextRelease === undefined) {
+    throw new Error(
+      `Did not expect 'prepare' to be invoked with undefined 'nextRelease'`
+    );
+  }
   // This is the default commit message from @semantic-release/git
-  const message =
-    "chore(release): ${nextRelease.verseion} [skip ci]\n\n${nextRelease.notes}";
+  const message = `chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}`;
 
   for (const path of assets) {
     const content = readFileInBase64(path);
