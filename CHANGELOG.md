@@ -1,3 +1,10 @@
+## [1.0.7](https://github.com/semantic-release-extras/verified-git-commit/compare/v1.0.6...v1.0.7) (2023-05-22)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @octokit/plugin-throttling to v6 ([b4cfd96](https://github.com/semantic-release-extras/verified-git-commit/commit/b4cfd96e359902e10c880d1d4c90e2bdde18cbc0))
+
 ## [1.0.6](https://github.com/semantic-release-extras/verified-git-commit/compare/v1.0.5...v1.0.6) (2023-02-19)
 
 
