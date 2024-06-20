@@ -24,8 +24,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@octokit/plugin-throttling": "^8.0.0",
-    "@octokit/rest": "^20.0.0",
+    "@octokit/plugin-throttling": "^9.0.0",
+    "@octokit/rest": "^21.0.0",
     "parse-github-repo-url": "1.4.1"
   },
   "devDependencies": {
