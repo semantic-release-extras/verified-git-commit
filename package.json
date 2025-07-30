@@ -29,7 +29,7 @@
     "parse-github-repo-url": "1.4.1"
   },
   "devDependencies": {
-    "@types/node": "22.16.5",
+    "@types/node": "22.17.0",
     "@types/parse-github-repo-url": "1.4.2",
     "@types/semantic-release": "20.0.6",
     "typescript": "5.8.3"
