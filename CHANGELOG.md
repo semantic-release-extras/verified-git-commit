@@ -1,3 +1,10 @@
+## [1.0.11](https://github.com/semantic-release-extras/verified-git-commit/compare/v1.0.10...v1.0.11) (2025-08-23)
+
+
+### Bug Fixes
+
+* **deps:** update octokit monorepo ([9972d0d](https://github.com/semantic-release-extras/verified-git-commit/commit/9972d0d8feb7470bd6e8c8e16b2a8359d14648c4))
+
 ## [1.0.10](https://github.com/semantic-release-extras/verified-git-commit/compare/v1.0.9...v1.0.10) (2025-05-04)
 
 
