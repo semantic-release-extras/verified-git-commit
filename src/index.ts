@@ -5,12 +5,18 @@ import { Octokit } from "@octokit/rest";
 import { throttling } from "@octokit/plugin-throttling";
 import type { Context, PluginSpec } from "semantic-release";
 import parseRepositoryUrl from "parse-github-repo-url";
+import { template } from "lodash";
 
 const ThrottlingOctokit = Octokit.plugin(throttling);
 
 type RepositorySlug = {
   owner: string;
   name: string;
+};
+
+type PluginConfig = {
+  assets: string[];
+  message?: string;
 };
 
 function readFileInBase64(path: string): string {
@@ -56,7 +62,7 @@ function unsafeParseRepositorySlug(repositoryUrl: string): RepositorySlug {
 
 // The type PluginSpec is misleading here, `semantic-release --dry-run`
 // indicates this value is an object.
-function unsafeParseAssets(pluginConfig: unknown): string[] {
+function unsafeParsePluginConfig(pluginConfig: unknown): PluginConfig {
   if (typeof pluginConfig === "string") {
     throw new Error(`Expected plugin config to specify 'assets'`);
   }
@@ -73,14 +79,32 @@ function unsafeParseAssets(pluginConfig: unknown): string[] {
       `Expected plugin config 'assets' to contain an array of strings`
     );
   }
-  return assets.map((value) => unsafeParseString(value));
+
+  const parsedAssets = assets.map((value) => unsafeParseString(value));
+
+  // Parse optional message configuration
+  const result: PluginConfig = {
+    assets: parsedAssets,
+  };
+
+  if ("message" in config) {
+    if (typeof config.message === "string") {
+      result.message = config.message;
+    } else if (config.message !== undefined) {
+      throw new Error(
+        `Expected plugin config 'message' to be a string if provided`
+      );
+    }
+  }
+
+  return result;
 }
 
 function verifyConditions(pluginConfig: PluginSpec, context: Context) {
   const repositoryUrl = unsafeParseString(context.options?.repositoryUrl);
   unsafeParseRepositorySlug(repositoryUrl);
   unsafeParseString(context.env["GITHUB_TOKEN"]);
-  unsafeParseAssets(pluginConfig);
+  unsafeParsePluginConfig(pluginConfig);
   // TODO: test if github token has the right permissions, like
   // @semantic-release/git does
 }
@@ -90,7 +114,7 @@ async function prepare(pluginConfig: PluginSpec, context: Context) {
   const branch = context.branch.name;
   const slug = unsafeParseRepositorySlug(repositoryUrl);
   const githubToken = unsafeParseString(context.env["GITHUB_TOKEN"]);
-  const assets = unsafeParseAssets(pluginConfig);
+  const config = unsafeParsePluginConfig(pluginConfig);
   const octokit = getOctokit(githubToken);
 
   const nextRelease = context.nextRelease;
@@ -99,10 +123,17 @@ async function prepare(pluginConfig: PluginSpec, context: Context) {
       `Did not expect 'prepare' to be invoked with undefined 'nextRelease'`
     );
   }
-  // This is the default commit message from @semantic-release/git
-  const message = `chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}`;
 
-  for (const path of assets) {
+  // Use custom message template if provided, otherwise use default from @semantic-release/git
+  const message = config.message
+    ? template(config.message)({
+        branch: context.branch.name,
+        lastRelease: context.lastRelease,
+        nextRelease: context.nextRelease,
+      })
+    : `chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}`;
+
+  for (const path of config.assets) {
     const content = readFileInBase64(path);
     const sha = execSync(`git rev-parse ${branch}:${path}`, {
       encoding: "utf8",
