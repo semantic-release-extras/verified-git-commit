@@ -53,11 +53,31 @@ npm install --save-dev --save-exact @semantic-release-extras/verified-git-commit
 
 ## Use
 
-| Step     | Description                                                                                        |
-| -------- | -------------------------------------------------------------------------------------------------- |
-| `assets` | List of assets to commit back to the release branch. Each asset will be updated in its own commit. |
+| Step      | Description                                                                                         |
+| --------- | --------------------------------------------------------------------------------------------------- |
+| `assets`  | List of assets to commit back to the release branch. Each asset will be updated in its own commit. |
+| `message` | The commit message template. Optional, defaults to `chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}` |
 
-For example:
+### Configuration
+
+The `message` option uses [Lodash templates](https://lodash.com/docs#template) and supports the following variables:
+
+- `branch` - The branch name
+- `lastRelease` - Previous release details with properties:
+  - `lastRelease.version` - Version of the previous release
+  - `lastRelease.gitTag` - Git tag of the previous release
+  - `lastRelease.gitHead` - Git hash of the previous release
+- `nextRelease` - Current release info with properties:
+  - `nextRelease.version` - Version of the next release
+  - `nextRelease.gitTag` - Git tag of the next release
+  - `nextRelease.gitHead` - Git hash of the next release
+  - `nextRelease.notes` - Release notes for the next release
+
+**Note:** It is recommended to include `[skip ci]` in the commit message to not trigger a new build. Some CI services support the `[skip ci]` keyword only in the subject of the message.
+
+### Examples
+
+Basic configuration with default commit message:
 
 ```json
 {
@@ -66,6 +86,38 @@ For example:
       "@semantic-release-extras/verified-git-commit",
       {
         "assets": ["CHANGELOG.md"]
+      }
+    ]
+  ]
+}
+```
+
+Custom commit message template:
+
+```json
+{
+  "plugins": [
+    [
+      "@semantic-release-extras/verified-git-commit",
+      {
+        "assets": ["CHANGELOG.md", "package.json"],
+        "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
+      }
+    ]
+  ]
+}
+```
+
+Advanced template with branch name:
+
+```json
+{
+  "plugins": [
+    [
+      "@semantic-release-extras/verified-git-commit",
+      {
+        "assets": ["CHANGELOG.md"],
+        "message": "chore(release): ${nextRelease.version} on ${branch} [skip ci]\n\n${nextRelease.notes}"
       }
     ]
   ]
