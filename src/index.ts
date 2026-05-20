@@ -1,10 +1,12 @@
 import * as fs from "node:fs";
-import { execSync } from "node:child_process";
 
 import { Octokit } from "@octokit/rest";
 import { throttling } from "@octokit/plugin-throttling";
 import type { Context, PluginSpec } from "semantic-release";
 import parseRepositoryUrl from "parse-github-repo-url";
+
+import { CreateOrUpdateFilesOptions } from 'octokit-commit-multiple-files/create-or-update-files';
+import createOrUpdateFiles from 'octokit-commit-multiple-files/create-or-update-files';
 
 const ThrottlingOctokit = Octokit.plugin(throttling);
 
@@ -102,21 +104,32 @@ async function prepare(pluginConfig: PluginSpec, context: Context) {
   // This is the default commit message from @semantic-release/git
   const message = `chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}`;
 
+  console.info('Computing changes for signed commit');
+  const changedFiles: { [key: string]: string } = {};
   for (const path of assets) {
-    const content = readFileInBase64(path);
-    const sha = execSync(`git rev-parse ${branch}:${path}`, {
-      encoding: "utf8",
-    }).trim();
+    changedFiles[path] = readFileInBase64(path);
+  }
 
-    await octokit.rest.repos.createOrUpdateFileContents({
+  console.info('Pushing on GitHub via API');
+  try {
+    const options: CreateOrUpdateFilesOptions = {
       owner: slug.owner,
       repo: slug.name,
-      path,
-      message,
       branch,
-      content,
-      sha,
-    });
+      changes: [
+        {
+          message,
+          files: changedFiles,
+        },
+      ],
+    };
+
+    await createOrUpdateFiles(octokit, options);
+
+    console.log('Files updated successfully!');
+  } catch (error) {
+    console.error('Error updating files:', error);
+    throw error;
   }
 }
 
