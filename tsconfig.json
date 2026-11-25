@@ -4,6 +4,7 @@
   "exclude": ["node_modules", "dist"],
   "compilerOptions": {
     "strict": true,
+    "allowJs": true,
     "allowUnusedLabels": false,
     "allowUnreachableCode": false,
     "exactOptionalPropertyTypes": true,
